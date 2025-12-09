@@ -8,7 +8,7 @@ It empowers universities to issue certificates on-chain, allows students to own 
 ## Installation
 Clone the repository:
 
-git clone https://github.com/your-username/credentify.git
+git clone https://github.com/Aditya-ingole21/credentify.git
 cd credentify
 
 
