@@ -2,7 +2,7 @@ import { ethers } from "ethers";
 
 
 // src/lib/contract.ts
-export const CONTRACT_ADDRESS = "0xafCC2471d41207a5115cffb5d52EB7bD893Fc146";
+export const CONTRACT_ADDRESS = "0x2Df29DB8ebcb9CE8432281E852A24fdbb65B32d6";
 
 export const CONTRACT_ABI = [
   
