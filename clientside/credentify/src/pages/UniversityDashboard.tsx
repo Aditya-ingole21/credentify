@@ -5,9 +5,9 @@ import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/Card'
 import { Button } from '../components/ui/button';
 import { Input } from '../components/ui/input';
 import { Label } from '../components/ui/label';
-import { Upload, FileText, Award, Plus, CheckCircle, AlertCircle, Loader2 } from 'lucide-react';
+import { Upload, FileText, Award, Plus, CheckCircle, AlertCircle, Loader2, Download } from 'lucide-react';
 import { ethers } from 'ethers';
-import { QRCodeSVG } from 'qrcode.react';
+import { QRCodeCanvas } from 'qrcode.react';
 import { cn } from '../lib/utils'; // Imported cn utility
 
 interface CertificateForm {
@@ -210,7 +210,7 @@ export const UniversityDashboard: React.FC = () => {
 
           {/* ⬇⬇⬇ ONLY CHANGE APPLIED HERE ⬇⬇⬇ */}
           <Card className='shadow-xl border-gray-200 w-full col-span-full'>
-          {/* ⬆⬆⬆ ONLY CHANGE APPLIED HERE ⬆⬆⬆ */}
+            {/* ⬆⬆⬆ ONLY CHANGE APPLIED HERE ⬆⬆⬆ */}
 
             <CardHeader>
               <CardTitle className="flex items-center text-gray-900">
@@ -349,7 +349,7 @@ export const UniversityDashboard: React.FC = () => {
                     Share this code for instant verification.
                   </p>
 
-                  <QRCodeSVG
+                  <QRCodeCanvas
                     id="qr-code"
                     value={issuedCert.qrData || ''}
                     size={200}
@@ -362,7 +362,7 @@ export const UniversityDashboard: React.FC = () => {
                     variant="outline"
                     className="mt-4 w-full text-gray-800 border-gray-300 hover:bg-gray-100"
                   >
-                    <Upload className="w-4 h-4 mr-2" />
+                    <Download className="w-4 h-4 mr-2" />
                     Download QR Code
                   </Button>
                 </div>

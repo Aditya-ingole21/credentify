@@ -3,6 +3,9 @@ import React, { createContext, useContext, useState, useEffect, type ReactNode }
 import { ethers } from 'ethers';
 import { CONTRACT_ADDRESS, CONTRACT_ABI } from '../lib/contract';
 
+// ✅ Sepolia Testnet chain ID (11155111 in hex)
+const SEPOLIA_CHAIN_ID = "0xaa36a7";
+
 interface Web3ContextType {
   account: string | null;
   provider: ethers.BrowserProvider | null;
@@ -34,6 +37,33 @@ export const Web3Provider: React.FC<{ children: ReactNode }> = ({ children }) =>
       if (!eth) {
         alert("Please install MetaMask or another Web3 wallet!");
         return;
+      }
+
+      // ✅ Switch to Sepolia before doing anything else
+      const currentChainId = await eth.request({ method: "eth_chainId" });
+      if (currentChainId !== SEPOLIA_CHAIN_ID) {
+        try {
+          await eth.request({
+            method: "wallet_switchEthereumChain",
+            params: [{ chainId: SEPOLIA_CHAIN_ID }],
+          });
+        } catch (switchError: any) {
+          // If Sepolia not added to MetaMask, add it
+          if (switchError.code === 4902) {
+            await eth.request({
+              method: "wallet_addEthereumChain",
+              params: [{
+                chainId: SEPOLIA_CHAIN_ID,
+                chainName: "Sepolia Testnet",
+                nativeCurrency: { name: "ETH", symbol: "ETH", decimals: 18 },
+                rpcUrls: ["https://rpc.sepolia.org"],
+                blockExplorerUrls: ["https://sepolia.etherscan.io"],
+              }],
+            });
+          } else {
+            throw switchError;
+          }
+        }
       }
 
       // Request account access - this will trigger MetaMask popup
@@ -119,6 +149,13 @@ export const Web3Provider: React.FC<{ children: ReactNode }> = ({ children }) =>
         const accounts = await eth.request({ method: 'eth_accounts' });
         
         if (accounts && accounts.length > 0) {
+          // ✅ Check network on auto-reconnect — only connect if already on Sepolia
+          const currentChainId = await eth.request({ method: "eth_chainId" });
+          if (currentChainId !== SEPOLIA_CHAIN_ID) {
+            console.warn("Auto-reconnect skipped: not on Sepolia. Please connect manually.");
+            return;
+          }
+
           // Auto-reconnect if previously connected
           const provider = new ethers.BrowserProvider(eth);
           const signer = await provider.getSigner();

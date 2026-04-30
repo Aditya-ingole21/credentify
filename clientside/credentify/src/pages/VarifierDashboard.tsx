@@ -1,4 +1,4 @@
-// src/pages/VerifierDashboard.tsx
+﻿// src/pages/VerifierDashboard.tsx
 import React, { useState, useRef } from 'react';
 import { useWeb3 } from '../context/Web3Context';
 import { Card, CardHeader, CardTitle, CardContent } from '../components/ui/Card';
@@ -17,7 +17,8 @@ import {
   Calendar,
   User,
   Award,
-  Loader2 // Added Loader2 for verifying state visual consistency
+  Loader2, // Added Loader2 for verifying state visual consistency
+  ExternalLink
 } from 'lucide-react';
 import jsQR from 'jsqr';
 import { ethers } from 'ethers';
@@ -387,13 +388,20 @@ export const VerifierDashboard: React.FC = () => {
                     </div>
 
                         {/* Button for IPFS Document */}
-                    <Button
-                      onClick={() => window.open(`https://ipfs.io/ipfs/${verificationResult.ipfsHash}`, '_blank')}
-                      variant="outline"
-                      className="w-full text-gray-800 border-gray-300 hover:bg-gray-100"
-                    >
-                      View Certificate Document
-                    </Button>
+                    <Button
+                      onClick={() => {
+                        if (!verificationResult.ipfsHash) {
+                          alert('No document found for this certificate.');
+                          return;
+                        }
+                        window.open("https://dweb.link/ipfs/" + verificationResult.ipfsHash, "_blank");
+                      }}
+                      variant="outline"
+                      className="w-full text-gray-800 border-gray-300 hover:bg-gray-100"
+                    >
+                      <ExternalLink className="w-4 h-4 mr-2" />
+                      View Certificate Document
+                    </Button>
                   </div>
                 </div>
               ) : (
